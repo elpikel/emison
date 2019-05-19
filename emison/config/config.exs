@@ -17,6 +17,10 @@ config :emison, EmisonWeb.Endpoint,
   render_errors: [view: EmisonWeb.ErrorView, accepts: ~w(html json)],
   pubsub: [name: Emison.PubSub, adapter: Phoenix.PubSub.PG2]
 
+config :emison, Emison.Guardian,
+  issuer: "EmisonWeb",
+  secret_key: "tLdIWDt0yGnKhZYNJY42/P5yNsU8xKljX+wGyWLs1x3CZAuOIdeg5oAFS6rA1dRV"
+
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",

@@ -1,6 +1,8 @@
 defmodule EmisonWeb.Router do
   use EmisonWeb, :router
 
+  alias EmisonWeb.Guardian
+
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
@@ -13,10 +15,21 @@ defmodule EmisonWeb.Router do
     plug :accepts, ["json"]
   end
 
+  pipeline :jwt_authenticated do
+    plug Guardian.AuthPipeline
+  end
+
   scope "/api/v1", EmisonWeb do
     pipe_through :api
 
-    resources "/users", UserController, only: [:create, :show, :index]
+    post "/sign_up", UserController, :create
+    post "/sign_in", UserController, :sign_in
+  end
+
+  scope "/api/v1", EmisonWeb do
+    pipe_through [:api, :jwt_authenticated]
+
+    get "/my_user", UserController, :show
   end
 
   scope "/", EmisonWeb do
@@ -24,9 +37,4 @@ defmodule EmisonWeb.Router do
 
     get "/", PageController, :index
   end
-
-  # Other scopes may use custom stacks.
-  # scope "/api", EmisonWeb do
-  #   pipe_through :api
-  # end
 end
