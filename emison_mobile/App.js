@@ -1,14 +1,24 @@
-// Import the screens
-import Main from './components/Main';
-import Chat from './components/Chat';
-// Import React Navigation
-import { createStackNavigator, createAppContainer } from 'react-navigation'
+import React, { Component } from 'react';
+import Auth from './screens/Auth';
+import LoggedIn from './screens/LoggedIn';
 
-// Create the navigator
-const AppNavigator = createStackNavigator({
-  Main: { screen: Main },
-  Chat: { screen: Chat },
-});
+export default class App extends Component {
+  constructor() {
+    super();
+    this.state = {
+      jwt: '',
+    }
+  }
 
-// Export it as the root component
-export default createAppContainer(AppNavigator);
+  render() {
+     if (!this.state.jwt) {
+      return (
+        <Auth />
+      );
+    } else if (this.state.jwt) {
+      return (
+        <LoggedIn />
+      );
+    }
+  }
+}
