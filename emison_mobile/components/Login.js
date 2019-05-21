@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { Text, View } from 'react-native';
 import { Input, TextLink, Loading, Button } from './common';
+import axios from 'axios';
 
 class Login extends Component {
   constructor(props){
@@ -11,6 +12,36 @@ class Login extends Component {
       error: '',
       loading: false
     };
+
+    this.loginUser = this.loginUser.bind(this);
+    this.onLoginFail = this.onLoginFail.bind(this);
+  }
+
+  loginUser() {
+    const { email, password, password_confirmation } = this.state;
+
+    this.setState({ error: '', loading: true });
+
+    // NOTE Post to HTTPS only in production
+    axios.post("http://localhost:4000/api/v1/sign_in",{
+        email: email,
+        password: password
+    })
+    .then((response) => {
+      deviceStorage.saveKey("id_token", response.data.jwt);
+      this.props.newJWT(response.data.jwt);
+    })
+    .catch((error) => {
+      console.log(error);
+      this.onLoginFail();
+    });
+  }
+
+  onLoginFail() {
+    this.setState({
+      error: 'Login Failed',
+      loading: false
+    });
   }
 
   render() {
@@ -44,11 +75,12 @@ class Login extends Component {
           </Text>
 
           {!loading ?
-            <Button>
+            <Button onPress={this.loginUser}>
               Login
             </Button>
             :
-            <Loading size={'large'} />}
+            <Loading size={'large'} />
+          }
 
         </View>
         <TextLink onPress={this.props.authSwitch}>
