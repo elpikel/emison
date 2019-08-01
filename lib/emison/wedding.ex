@@ -7,6 +7,7 @@ defmodule Emison.Wedding do
   schema "weddings" do
     field :description, :string
     field :name, :string
+    has_many :greetings, Emison.Greeting
 
     timestamps()
   end

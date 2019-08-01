@@ -6,8 +6,8 @@ defmodule Emison.Greeting do
   @foreign_key_type :binary_id
   schema "greetings" do
     field :image, :string
-    field :name, :string
-    field :wedding_id, :binary_id
+    field :text, :string
+    belongs_to :wedding, Emison.Wedding
 
     timestamps()
   end
