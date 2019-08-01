@@ -8,12 +8,13 @@
 use Mix.Config
 
 config :emison,
-  ecto_repos: [Emison.Repo]
+  ecto_repos: [Emison.Repo],
+  generators: [binary_id: true]
 
 # Configures the endpoint
 config :emison, EmisonWeb.Endpoint,
   url: [host: "localhost"],
-  secret_key_base: "+m6x81j746jPAE3Q9dYFWXvMtP/iqYPBAeXjnBzNZVhXUch6/TFcysF1zp/+HPij",
+  secret_key_base: "T+b3YmaPWGokHbH3gI765XjmoaCUtVacENf7sR5/jrRJVEerLVIz8+ZEPhRA4c9D",
   render_errors: [view: EmisonWeb.ErrorView, accepts: ~w(html json)],
   pubsub: [name: Emison.PubSub, adapter: Phoenix.PubSub.PG2]
 
