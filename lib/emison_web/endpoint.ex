@@ -40,7 +40,7 @@ defmodule EmisonWeb.Endpoint do
   plug Plug.Session,
     store: :cookie,
     key: "_emison_key",
-    signing_salt: "wltpMHlX"
+    signing_salt: "p+w3XVkS"
 
   plug EmisonWeb.Router
 end

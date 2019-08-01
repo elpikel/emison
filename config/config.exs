@@ -14,7 +14,7 @@ config :emison,
 # Configures the endpoint
 config :emison, EmisonWeb.Endpoint,
   url: [host: "localhost"],
-  secret_key_base: "T+b3YmaPWGokHbH3gI765XjmoaCUtVacENf7sR5/jrRJVEerLVIz8+ZEPhRA4c9D",
+  secret_key_base: "W/rOoSAkoas5jUS6Nw7KzXjWpwu8+86z7UdrKVsNPuw66TNOjzb1D0u/9m7msbCB",
   render_errors: [view: EmisonWeb.ErrorView, accepts: ~w(html json)],
   pubsub: [name: Emison.PubSub, adapter: Phoenix.PubSub.PG2]
 
