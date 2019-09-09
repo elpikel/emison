@@ -13,7 +13,6 @@ using System;
 
 namespace Emison.Controllers
 {
-  // todo: this should be moved to separate area?
   [AllowAnonymous]
   public class GreetingsController : Controller
   {
@@ -24,7 +23,7 @@ namespace Emison.Controllers
       _db = db;
     }
 
-    [HttpGet("/{invitationCode}/events/{eventId}/")]
+    [HttpGet]
     public async Task<IActionResult> Index(Guid invitationCode, Guid eventId)
     {
       var greetings = await _db.Greetings
@@ -32,28 +31,50 @@ namespace Emison.Controllers
         .Where(g => g.EventId == eventId && g.Event.InvitationCode == invitationCode)
         .ToListAsync();
 
-      return View(greetings
+      return View(new ViewModels.EventGreetings
+      {
+        EventId = eventId,
+        InvitationCode = invitationCode,
+        Greetings = greetings
         .Select(g => new ViewModels.Greeting
         {
           Text = g.Text,
           Signature = g.Signature,
           File = g.File
-        }).ToList());
+        }).ToList()
+      });
     }
 
-    public IActionResult Create()
+    [HttpGet]
+    public async Task<IActionResult> Create(Guid invitationCode, Guid eventId)
     {
-      return View();
+      var existingEvent = await _db.Events
+        .SingleOrDefaultAsync(e => e.Id == eventId && e.InvitationCode == invitationCode);
+
+      if (existingEvent != null)
+        return View(new NewGreeting
+        {
+          EventId = eventId,
+          InvitationCode = invitationCode
+        });
+
+      return Forbid();
     }
 
     [HttpPost]
     public async Task<IActionResult> Create([FromForm]NewGreeting newGreeting)
     {
+      var existingEvent = await _db.Events
+        .SingleOrDefaultAsync(e => e.Id == newGreeting.EventId && e.InvitationCode == newGreeting.InvitationCode);
+
+      if (existingEvent == null)
+        return Forbid();
       // todo add validation
 
       var file = await Download(newGreeting.File);
       _db.Greetings.Add(new Models.Greeting
       {
+        EventId = newGreeting.EventId,
         Text = newGreeting.Text,
         Signature = newGreeting.Signature,
         File = file
@@ -61,7 +82,10 @@ namespace Emison.Controllers
 
       await _db.SaveChangesAsync();
 
-      return RedirectToAction("Index");
+      return RedirectToAction(
+        "Index",
+        "Greetings",
+        new { InvitationCode = newGreeting.InvitationCode, EventId = newGreeting.EventId });
     }
 
     public async Task<string> Download(IFormFile fromFile)

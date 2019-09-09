@@ -1,7 +1,23 @@
-﻿@{
+﻿@model Emison.ViewModels.NewGreeting
+@{
     ViewData["Title"] = "Greetings";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Create</h1>
+    <form asp-controller="Greetings" asp-action="Create" method="post" enctype="multipart/form-data">
+    <input asp-for="EventId" type="hidden"/>
+    <input asp-for="InvitationCode" type="hidden"/>
+      <div>
+        <label asp-for="Text"></label>
+        <textarea asp-for="Text"></textarea>
+      </div>
+      <div>
+        <label asp-for="Signature"></label>
+        <input asp-for="Signature"/>
+      </div>
+      <div>
+        <input type="file" asp-for="File" />
+      </div>
+      <button type="submit">Create</button>
+    </form>
 </div>

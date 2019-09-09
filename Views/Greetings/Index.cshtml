@@ -1,11 +1,17 @@
-﻿@model System.Collections.Generic.List<Emison.ViewModels.Greeting>
+﻿@model Emison.ViewModels.EventGreetings
 @{
     ViewData["Title"] = "Greetings";
 }
-
+@{
+  var createParams = new Dictionary<string, string>
+  {
+      { "invitationCode", Model.InvitationCode.ToString() },
+      { "eventId", Model.EventId.ToString() }
+  };
+}
 <div class="text-center">
     <h1 class="display-4">Greetings</h1>
-    @foreach (var greeting in Model)
+    @foreach (var greeting in Model.Greetings)
     {
       <div>
         <span>@greeting.Text</span>
@@ -13,5 +19,5 @@
         <img width="200" src="@greeting.File" />
       </div>
     }
-    <a class="nav-link text-dark" asp-area="" asp-controller="Greetings" asp-action="New">Create new</a>
+    <a class="nav-link text-dark" asp-area="" asp-controller="Greetings" asp-action="Create" asp-all-route-data="createParams">Create new</a>
 </div>
