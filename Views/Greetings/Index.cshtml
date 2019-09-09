@@ -1,0 +1,17 @@
+﻿@model System.Collections.Generic.List<Emison.ViewModels.Greeting>
+@{
+    ViewData["Title"] = "Greetings";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Greetings</h1>
+    @foreach (var greeting in Model)
+    {
+      <div>
+        <span>@greeting.Text</span>
+        <span>@greeting.Signature</span>
+        <img width="200" src="@greeting.File" />
+      </div>
+    }
+    <a class="nav-link text-dark" asp-area="" asp-controller="Greetings" asp-action="New">Create new</a>
+</div>

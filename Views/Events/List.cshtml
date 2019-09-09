@@ -1,0 +1,15 @@
+@model System.Collections.Generic.List<Emison.ViewModels.Event>
+@{
+    ViewData["Title"] = "Events";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Events</h1>
+    @foreach (var e in Model)
+    {
+      <div>
+        <span>@e.Date</span>
+        <span>@e.Place</span>
+      </div>
+    }
+</div>

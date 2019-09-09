@@ -1,0 +1,23 @@
+{
+  "workbench.iconTheme": "vscode-icons",
+  "editor.tabSize": 2,
+  "editor.renderWhitespace": "all",
+  "editor.insertSpaces": true,
+  "window.zoomLevel": 0,
+  "editor.rulers": [100],
+  "editor.detectIndentation": false,
+  "editor.formatOnSave": true,
+  "beautify.options": {
+    "css": {
+      "indent_size": 2,
+      "newline_between_rules": true,
+      "end_with_newline": true
+    }
+  },
+  "html.format.wrapAttributes": "force-expand-multiline",
+  "html.format.wrapLineLength": 120,
+  "prettier.singleQuote": true,
+  "prettier.trailingComma": "all",
+  "prettier.arrowParens": "always",
+  "prettier.printWidth": 100
+}
