@@ -38,7 +38,7 @@ namespace Emison
       });
 
       services.AddDbContext<ApplicationDbContext>(options =>
-        options.UseSqlite(
+        options.UseNpgsql(
           Configuration.GetConnectionString("DefaultConnection")));
       services.AddDefaultIdentity<IdentityUser>()
         .AddRoles<IdentityRole>()
