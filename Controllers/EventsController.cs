@@ -78,7 +78,8 @@ namespace Emison.Controllers
       {
         Date = newEvent.Date,
         Place = newEvent.Place,
-        UserId = user.Id
+        UserId = user.Id,
+        InvitationCode = Guid.NewGuid()
       });
 
       await _applicationDbContext.SaveChangesAsync();

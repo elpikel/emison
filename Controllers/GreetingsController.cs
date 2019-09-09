@@ -9,6 +9,7 @@ using System.IO;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authorization;
+using System;
 
 namespace Emison.Controllers
 {
@@ -23,19 +24,24 @@ namespace Emison.Controllers
       _db = db;
     }
 
-    public async Task<IActionResult> Index()
+    [HttpGet("/{invitationCode}/events/{eventId}/")]
+    public async Task<IActionResult> Index(Guid invitationCode, Guid eventId)
     {
-      var greetings = await _db.Greetings.ToListAsync();
+      var greetings = await _db.Greetings
+        .Include(g => g.Event)
+        .Where(g => g.EventId == eventId && g.Event.InvitationCode == invitationCode)
+        .ToListAsync();
 
-      return View(greetings.Select(g => new ViewModels.Greeting
-      {
-        Text = g.Text,
-        Signature = g.Signature,
-        File = g.File
-      }).ToList());
+      return View(greetings
+        .Select(g => new ViewModels.Greeting
+        {
+          Text = g.Text,
+          Signature = g.Signature,
+          File = g.File
+        }).ToList());
     }
 
-    public IActionResult New()
+    public IActionResult Create()
     {
       return View();
     }
