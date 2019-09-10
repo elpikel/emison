@@ -1,7 +1,7 @@
 using System;
 using Microsoft.AspNetCore.Http;
 
-namespace Emison.ViewModels
+namespace Emison.Guests.ViewModels
 {
   public class NewGreeting
   {

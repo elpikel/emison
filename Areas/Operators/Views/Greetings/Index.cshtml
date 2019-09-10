@@ -1,0 +1,15 @@
+﻿@model List<Emison.Operators.ViewModels.Greeting>
+@{
+    ViewData["Title"] = "Greetings";
+}
+<div class="text-center">
+    <h1 class="display-4">Greetings</h1>
+    @foreach (var greeting in Model)
+    {
+      <div>
+        <span>@greeting.Text</span>
+        <span>@greeting.Signature</span>
+        <img width="200" src="@greeting.File" />
+      </div>
+    }
+</div>

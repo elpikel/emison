@@ -1,10 +1,10 @@
-﻿@model Emison.ViewModels.NewGreeting
+﻿@model Emison.Guests.ViewModels.NewGreeting
 @{
     ViewData["Title"] = "Greetings";
 }
 
 <div class="text-center">
-    <form asp-controller="Greetings" asp-action="Create" method="post" enctype="multipart/form-data">
+    <form asp-area="Guests" asp-controller="Greetings" asp-action="Create" method="post" enctype="multipart/form-data">
     <input asp-for="EventId" type="hidden"/>
     <input asp-for="InvitationCode" type="hidden"/>
       <div>

@@ -1,10 +1,10 @@
-@model Emison.ViewModels.NewEvent
+@model Emison.Operators.ViewModels.NewEvent
 @{
     ViewData["Title"] = "Event";
 }
 
 <div class="text-center">
-    <form asp-controller="Events" asp-action="New" method="post">
+    <form asp-controller="Events" asp-action="Create" method="post">
       <div>
         <label asp-for="Date"></label>
         <input asp-for="Date"/>

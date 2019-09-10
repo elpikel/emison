@@ -64,7 +64,7 @@ namespace Emison
       }
       else
       {
-        app.UseExceptionHandler("/Home/Error");
+        app.UseExceptionHandler("/Home/Error"); // TODO: check that
         // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
         app.UseHsts();
       }
@@ -77,9 +77,19 @@ namespace Emison
 
       app.UseMvc(routes =>
       {
+        routes.MapAreaRoute(
+            name: "Guests",
+            areaName: "Guests",
+            template: "Guests/{controller=Greetings}/{action=Index}/{id?}");
+
+        routes.MapAreaRoute(
+            name: "Operators",
+            areaName: "Operators",
+            template: "Operators/{controller=Events}/{action=Index}/{id?}");
+
         routes.MapRoute(
-                  name: "default",
-                  template: "{controller=Home}/{action=Index}/{id?}");
+            name: "default",
+            template: "{controller=Home}/{action=Index}/{id?}");
       });
     }
   }

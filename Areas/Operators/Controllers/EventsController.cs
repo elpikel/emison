@@ -2,12 +2,12 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Emison.Data;
-using Emison.ViewModels;
+using Emison.Operators.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace Emison.Controllers
+namespace Emison.Operators.Controllers
 {
   public class EventsController : Controller
   {
@@ -32,7 +32,7 @@ namespace Emison.Controllers
         .ToListAsync();
 
       if (events.Count > 1)
-        return View("List", events.Select(e => new ViewModels.Event
+        return View("List", events.Select(e => new Operators.ViewModels.Event
         {
           Date = e.Date,
           Place = e.Place
@@ -41,10 +41,12 @@ namespace Emison.Controllers
       if (events.Count == 1)
       {
         var @event = events.First();
-        return View("Details", new ViewModels.Event
+        return View("Details", new Operators.ViewModels.Event
         {
           Date = @event.Date,
-          Place = @event.Place
+          Place = @event.Place,
+          Id = @event.Id,
+          InvitationCode = @event.InvitationCode
         });
       }
 
@@ -64,13 +66,13 @@ namespace Emison.Controllers
     }
 
     [HttpGet]
-    public IActionResult New()
+    public IActionResult Create()
     {
       return View();
     }
 
     [HttpPost]
-    public async Task<IActionResult> New([FromForm]NewEvent newEvent)
+    public async Task<IActionResult> Create([FromForm]NewEvent newEvent)
     {
       var user = await _userManager.FindByNameAsync(User.Identity.Name);
 

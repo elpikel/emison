@@ -1,6 +1,6 @@
 using System;
 
-namespace Emison.ViewModels
+namespace Emison.Operators.ViewModels
 {
   public class NewEvent
   {

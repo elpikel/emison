@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Emison.ViewModels
+namespace Emison.Guests.ViewModels
 {
   public class EventGreetings
   {

@@ -1,4 +1,4 @@
-namespace Emison.ViewModels
+namespace Emison.Operators.ViewModels
 {
   public class Greeting
   {
