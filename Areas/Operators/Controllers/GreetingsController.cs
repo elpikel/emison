@@ -12,6 +12,7 @@ using System;
 
 namespace Emison.Operators.Controllers
 {
+  [Area("Operators")]
   public class GreetingsController : Controller
   {
     private readonly ApplicationDbContext _db;

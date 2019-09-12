@@ -99,7 +99,7 @@ namespace Emison.Guests.Controllers
       using (var stream = new FileStream(path, FileMode.Create))
         await fromFile.CopyToAsync(stream);
 
-      return $"uploaded/{fromFile.FileName}";
+      return $"/uploaded/{fromFile.FileName}";
     }
   }
 }

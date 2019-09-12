@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Emison.Operators.Controllers
 {
+  [Area("Operators")]
   public class EventsController : Controller
   {
     private readonly ApplicationDbContext _applicationDbContext;

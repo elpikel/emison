@@ -77,15 +77,19 @@ namespace Emison
 
       app.UseMvc(routes =>
       {
-        routes.MapAreaRoute(
-            name: "Guests",
-            areaName: "Guests",
-            template: "Guests/{controller=Greetings}/{action=Index}/{id?}");
+        // routes.MapAreaRoute(
+        //     name: "Guests",
+        //     areaName: "Guests",
+        //     template: "Guests/{controller=Greetings}/{action=Index}/{id?}");
 
-        routes.MapAreaRoute(
-            name: "Operators",
-            areaName: "Operators",
-            template: "Operators/{controller=Events}/{action=Index}/{id?}");
+        // routes.MapAreaRoute(
+        //     name: "Operators",
+        //     areaName: "Operators",
+        //     template: "Operators/{controller=Events}/{action=Index}/{id?}");
+
+        routes.MapRoute(
+          name: "areas",
+          template: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
 
         routes.MapRoute(
             name: "default",
