@@ -29,6 +29,7 @@ namespace Emison.Operators.Controllers
       var user = await _userManager.FindByNameAsync(User.Identity.Name);
 
       var events = await _applicationDbContext.Events
+        .Include(e => e.Greetings)
         .Where(e => e.UserId == user.Id)
         .ToListAsync();
 
@@ -47,7 +48,14 @@ namespace Emison.Operators.Controllers
           Date = @event.Date,
           Place = @event.Place,
           Id = @event.Id,
-          InvitationCode = @event.InvitationCode
+          InvitationCode = @event.InvitationCode,
+          Greetings = @event.Greetings.Select(g => new Operators.ViewModels.Greeting
+          {
+            Id = g.Id,
+            Text = g.Text,
+            Signature = g.Signature,
+            File = g.File
+          }).ToList()
         });
       }
 

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Emison.Operators.ViewModels
 {
@@ -8,5 +9,6 @@ namespace Emison.Operators.ViewModels
     public string Place { get; set; }
     public Guid Id { get; set; }
     public Guid InvitationCode { get; set; }
+    public List<Greeting> Greetings { get; set; }
   }
 }

@@ -5,14 +5,14 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Emison.Models
 {
-  public class Event
+  public class Book
   {
-    [Key] public Guid Id { get; set; }
-    public DateTime Date { get; set; }
-    public string Place { get; set; }
-    public Guid InvitationCode { get; set; }
+    [Key] public long Id { get; set; }
+    [Required] public Guid EventId { get; set; }
     [Required] public string UserId { get; set; }
-    public virtual IdentityUser User { get; set; }
+
+    public IdentityUser User { get; set; }
+    public Event Event { get; set; }
     public List<Greeting> Greetings { get; set; }
   }
 }

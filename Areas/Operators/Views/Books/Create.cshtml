@@ -1,0 +1,20 @@
+@model Emison.Operators.ViewModels.BookDetails
+<div class="text-center">
+    <h1 class="display-4">Details</h1>
+    <div>
+      <form asp-area="Operators" asp-controller="Books" asp-action="Create" method="post">
+        <input name="EventId" asp-for="@Model.EventId" type="hidden" />
+        <input name="BookId" asp-for="@Model.BookId" type="hidden" />
+        @foreach (var greeting in @Model.Greetings)
+        {
+          <div>
+            <input name="Greetings" asp-for="@greeting.Id" type="hidden" />
+            <span>@greeting.Text</span>
+            <span>@greeting.Signature</span>
+            <img width="200" src="@greeting.File" />
+          </div>
+        }
+        <button type="submit">Create</button>
+      </form>
+    </div>
+</div>

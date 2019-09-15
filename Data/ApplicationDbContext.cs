@@ -11,6 +11,7 @@ namespace Emison.Data
   {
     public DbSet<Greeting> Greetings { get; set; }
     public DbSet<Event> Events { get; set; }
+    public DbSet<Book> Books { get; set; }
 
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
