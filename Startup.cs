@@ -15,6 +15,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using DinkToPdf.Contracts;
+using DinkToPdf;
 
 namespace Emison
 {
@@ -40,10 +42,13 @@ namespace Emison
       services.AddDbContext<ApplicationDbContext>(options =>
         options.UseNpgsql(
           Configuration.GetConnectionString("DefaultConnection")));
+
       services.AddDefaultIdentity<IdentityUser>()
         .AddRoles<IdentityRole>()
         .AddDefaultUI(UIFramework.Bootstrap4)
         .AddEntityFrameworkStores<ApplicationDbContext>();
+
+      services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
 
       services.AddMvc(config =>
       {
@@ -77,23 +82,13 @@ namespace Emison
 
       app.UseMvc(routes =>
       {
-        // routes.MapAreaRoute(
-        //     name: "Guests",
-        //     areaName: "Guests",
-        //     template: "Guests/{controller=Greetings}/{action=Index}/{id?}");
-
-        // routes.MapAreaRoute(
-        //     name: "Operators",
-        //     areaName: "Operators",
-        //     template: "Operators/{controller=Events}/{action=Index}/{id?}");
-
         routes.MapRoute(
           name: "areas",
           template: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
 
         routes.MapRoute(
-            name: "default",
-            template: "{controller=Home}/{action=Index}/{id?}");
+          name: "default",
+          template: "{controller=Home}/{action=Index}/{id?}");
       });
     }
   }

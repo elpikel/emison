@@ -1,5 +1,9 @@
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
+using DinkToPdf;
+using DinkToPdf.Contracts;
 using Emison.Data;
 using Emison.Operators.ViewModels;
 using Microsoft.AspNetCore.Identity;
@@ -13,13 +17,16 @@ namespace Emison.Operators.Controllers
   {
     private readonly ApplicationDbContext _applicationDbContext;
     private readonly UserManager<IdentityUser> _userManager;
+    private readonly IConverter _pdfConverter;
 
     public BooksController(
       ApplicationDbContext applicationDbContext,
-      UserManager<IdentityUser> userManager)
+      UserManager<IdentityUser> userManager,
+      IConverter pdfConverter)
     {
       _applicationDbContext = applicationDbContext;
       _userManager = userManager;
+      _pdfConverter = pdfConverter;
     }
 
     [HttpPost]
@@ -63,9 +70,49 @@ namespace Emison.Operators.Controllers
     }
 
     [HttpPost]
-    public IActionResult Create([FromForm]CreateBook createBook)
+    public async Task<IActionResult> Create([FromForm]CreateBook createBook)
     {
+      var greetings = await _applicationDbContext.Greetings
+        .Where(g => createBook.Greetings.Any(sg => sg == g.Id))
+        .ToListAsync();
 
+      var currentDirectory = Directory.GetCurrentDirectory();
+
+      var globalSettings = new GlobalSettings
+      {
+        ColorMode = ColorMode.Color,
+        Orientation = Orientation.Portrait,
+        PaperSize = PaperKind.A4,
+        Margins = new MarginSettings { Top = 10 },
+        DocumentTitle = "Book",
+        Out = Path.Combine(currentDirectory, "wwwroot", "books", $"{createBook.BookId}.pdf")
+      };
+
+      var images = new StringBuilder();
+
+      foreach (var greeting in greetings)
+      {
+        var path = Path.Combine(currentDirectory, "wwwroot") + greeting.File;
+        images.Append($"<span>{greeting.Text}</span>{greeting.Signature}<span></span><img src=\"{path}\" />");
+      }
+
+      var objectSettings = new ObjectSettings
+      {
+        PagesCount = false,
+        HtmlContent = $"<html><head></head><body>Test</body></html>",
+        WebSettings = {
+          DefaultEncoding = "utf-8"
+          // UserStyleSheet = Path.Combine(currentDirectory, "wwwroot", "css", "book.css")
+        }
+      };
+
+      var pdf = new HtmlToPdfDocument()
+      {
+        GlobalSettings = globalSettings,
+        Objects = { objectSettings }
+      };
+
+      _pdfConverter.Convert(pdf);
       return View();
     }
   }
