@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Emison.Data;
@@ -17,13 +12,18 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using DinkToPdf.Contracts;
 using DinkToPdf;
+using System;
+using System.IO;
+using System.Runtime.InteropServices;
 
 namespace Emison
 {
   public class Startup
   {
-    public Startup(IConfiguration configuration)
+    private readonly IHostingEnvironment _env;
+    public Startup(IConfiguration configuration, IHostingEnvironment env)
     {
+      _env = env;
       Configuration = configuration;
     }
 
@@ -48,6 +48,11 @@ namespace Emison
         .AddDefaultUI(UIFramework.Bootstrap4)
         .AddEntityFrameworkStores<ApplicationDbContext>();
 
+      var architectureFolder = (IntPtr.Size == 8) ? "64 bit" : "32 bit";
+      var wkHtmlToPdfPath = Path.Combine(_env.ContentRootPath, $"wkhtmltox/v0.12.4/{architectureFolder}/libwkhtmltox.{GetExtension()}");
+      var assemblyContext = new CustomAssemblyLoadContext();
+      assemblyContext.LoadUnmanagedLibrary(wkHtmlToPdfPath);
+
       services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
 
       services.AddMvc(config =>
@@ -57,6 +62,17 @@ namespace Emison
          .Build();
         config.Filters.Add(new AuthorizeFilter(policy));
       }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+    }
+
+    private string GetExtension()
+    {
+      if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+        return "dylib";
+
+      if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+        return "so";
+
+      return "dll";
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

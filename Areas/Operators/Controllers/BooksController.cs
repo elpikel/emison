@@ -77,42 +77,39 @@ namespace Emison.Operators.Controllers
         .ToListAsync();
 
       var currentDirectory = Directory.GetCurrentDirectory();
-
-      var globalSettings = new GlobalSettings
-      {
-        ColorMode = ColorMode.Color,
-        Orientation = Orientation.Portrait,
-        PaperSize = PaperKind.A4,
-        Margins = new MarginSettings { Top = 10 },
-        DocumentTitle = "Book",
-        Out = Path.Combine(currentDirectory, "wwwroot", "books", $"{createBook.BookId}.pdf")
-      };
-
       var images = new StringBuilder();
 
       foreach (var greeting in greetings)
       {
         var path = Path.Combine(currentDirectory, "wwwroot") + greeting.File;
-        images.Append($"<span>{greeting.Text}</span>{greeting.Signature}<span></span><img src=\"{path}\" />");
+        images.Append($"<span>{greeting.Text}</span><span>{greeting.Signature}</span><img width=\"600\" src=\"{path}\" />");
       }
 
-      var objectSettings = new ObjectSettings
+      var doc = new HtmlToPdfDocument()
       {
-        PagesCount = false,
-        HtmlContent = $"<html><head></head><body>Test</body></html>",
-        WebSettings = {
-          DefaultEncoding = "utf-8"
-          // UserStyleSheet = Path.Combine(currentDirectory, "wwwroot", "css", "book.css")
+        GlobalSettings = {
+          ColorMode = ColorMode.Color,
+          Orientation = Orientation.Landscape,
+          PaperSize = PaperKind.A4,
+        },
+        Objects = {
+          new ObjectSettings() {
+            PagesCount = true,
+            HtmlContent = $"<html><head></head><body>{images.ToString()}</body></html>",
+            WebSettings = { DefaultEncoding = "utf-8" }
+          }
         }
       };
 
-      var pdf = new HtmlToPdfDocument()
-      {
-        GlobalSettings = globalSettings,
-        Objects = { objectSettings }
-      };
+      var pdf = _pdfConverter.Convert(doc);
 
-      _pdfConverter.Convert(pdf);
+      if (!Directory.Exists("Files"))
+        Directory.CreateDirectory("Files");
+
+      var pdfPath = Path.Combine(currentDirectory, "wwwroot", "books", $"{createBook.BookId}.pdf");
+      using (FileStream stream = new FileStream(pdfPath, FileMode.Create))
+        stream.Write(pdf, 0, pdf.Length);
+
       return View();
     }
   }
