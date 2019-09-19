@@ -10,6 +10,7 @@ namespace Emison.Models
     [Key] public long Id { get; set; }
     [Required] public Guid EventId { get; set; }
     [Required] public string UserId { get; set; }
+    public string File { get; set; }
 
     public IdentityUser User { get; set; }
     public Event Event { get; set; }

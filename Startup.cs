@@ -20,10 +20,8 @@ namespace Emison
 {
   public class Startup
   {
-    private readonly IHostingEnvironment _env;
-    public Startup(IConfiguration configuration, IHostingEnvironment env)
+    public Startup(IConfiguration configuration)
     {
-      _env = env;
       Configuration = configuration;
     }
 
@@ -47,11 +45,6 @@ namespace Emison
         .AddRoles<IdentityRole>()
         .AddDefaultUI(UIFramework.Bootstrap4)
         .AddEntityFrameworkStores<ApplicationDbContext>();
-
-      var architectureFolder = (IntPtr.Size == 8) ? "64 bit" : "32 bit";
-      var wkHtmlToPdfPath = Path.Combine(_env.ContentRootPath, $"wkhtmltox/v0.12.4/{architectureFolder}/libwkhtmltox.{GetExtension()}");
-      var assemblyContext = new CustomAssemblyLoadContext();
-      assemblyContext.LoadUnmanagedLibrary(wkHtmlToPdfPath);
 
       services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
 

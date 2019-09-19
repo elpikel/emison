@@ -64,12 +64,6 @@ namespace Emison.Operators.Controllers
     }
 
     [HttpPost]
-    public IActionResult SelectDetails([FromForm]SelectDetails selectDetails)
-    {
-      return View();
-    }
-
-    [HttpPost]
     public async Task<IActionResult> Create([FromForm]CreateBook createBook)
     {
       var greetings = await _applicationDbContext.Greetings
@@ -110,7 +104,15 @@ namespace Emison.Operators.Controllers
       using (FileStream stream = new FileStream(pdfPath, FileMode.Create))
         stream.Write(pdf, 0, pdf.Length);
 
-      return View();
+      var book = await _applicationDbContext.Books.SingleOrDefaultAsync(b => b.Id == createBook.BookId);
+      book.File = $"/books/{createBook.BookId}.pdf";
+
+      await _applicationDbContext.SaveChangesAsync();
+
+      return View("Details", new FinishedBook
+      {
+        File = book.File
+      });
     }
   }
 }
